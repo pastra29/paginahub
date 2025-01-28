@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ texts.title }}</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #1e1e2f;
+            color: #e6e6e6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #292942;
+            color: #e6e6e6;
+            padding: 1em;
+            text-align: center;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1em;
+        }
+
+        footer {
+            background-color: #292942;
+            text-align: center;
+            color: #aaa;
+            padding: 1em;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: #2b2b45;
+            border-radius: 10px;
+            padding: 2em;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        h1, h2, legend {
+            color: #86c232;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5em;
+        }
+
+        input, textarea, select, button {
+            width: 100%;
+            margin-bottom: 1em;
+            padding: 0.8em;
+            border: none;
+            border-radius: 5px;
+            background: #3b3b59;
+            color: #e6e6e6;
+            font-size: 1em;
+        }
+
+        button {
+            background-color: #86c232;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #68a117;
+            transform: scale(1.05);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 1em;
+            color: #86c232;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: #68a117;
+        }
+
+        fieldset {
+            margin-bottom: 2em;
+            padding: 1em;
+            border: 1px solid #444;
+            border-radius: 5px;
+        }
+
+        .fadeIn {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .slideIn {
+            animation: slideIn 0.8s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .curriculum-display {
+            display: flex;            /* Usamos flexbox para disposición horizontal */
+            align-items: flex-start;  /* Alinea los items (imagen y contenido) al principio */
+            gap: 20px;                /* Espacio entre la foto y el contenido */
+            flex-wrap: wrap;          /* Asegura que el contenido no se desborde */
+        }
+        
+        /* Estilo para la imagen de perfil */
+        .photo {
+            width: 150px;           /* Ajusta el tamaño de la imagen (puedes modificar este valor) */
+            height: 150px;          /* Mantiene el alto igual al ancho para que sea cuadrada */
+            object-fit: cover;      /* Recorta la imagen para que se ajuste al tamaño sin distorsionar */
+            margin: 0 auto;         /* Centra la imagen */
+            display: block;         /* Asegura que la imagen se muestre como un bloque */
+        }
+        
+        /* Estilo para los textos del currículum */
+        .curriculum-display .details {
+            flex-grow: 1;            /* Hace que el contenido ocupe el espacio restante */
+            margin-top: 10px;        /* Espaciado entre la foto y el contenido */
+        }
+        
+        /* Estilo para cada párrafo de información */
+        .curriculum-display p {
+            margin: 8px 0;           /* Espaciado entre cada párrafo */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>{{ texts.title }}</h1>
+        <form method="GET" action="/" style="text-align: center;">
+            <label for="lang">Idioma:</label>
+            <select id="lang" name="lang" onchange="this.form.submit()">
+                <option value="es" {% if lang == 'es' %}selected{% endif %}>Español</option>
+                <option value="en" {% if lang == 'en' %}selected{% endif %}>English</option>
+            </select>
+        </form>
+    </header>
+
+    <main>
+        <div class="container fadeIn">
+            {% if name %}
+                <h2>{{ texts.welcome }} {{ name }}!</h2>
+
+                <form method="POST" action="/curriculum" enctype="multipart/form-data">
+                    <input type="hidden" name="name" value="{{ name }}">
+                    <input type="hidden" name="lang" value="{{ lang }}">
+                    
+                    <fieldset>
+                        <legend>{{ texts.personal_info }}</legend>
+                        <label for="full_name">{{ texts.full_name }}:</label>
+                        <input type="text" id="full_name" name="full_name" required>
+
+                        <label for="address">{{ texts.address }}:</label>
+                        <input type="text" id="address" name="address" required>
+
+                        <label for="phone">{{ texts.phone }}:</label>
+                        <input type="tel" id="phone" name="phone" required>
+
+                        <label for="email">{{ texts.email }}:</label>
+                        <input type="email" id="email" name="email" required>
+
+                        <label for="dob">{{ texts.dob }}:</label>
+                        <input type="date" id="dob" name="dob" required>
+
+                        <label for="photo">{{ texts.photo }}:</label>
+                        <input type="file" id="photo" name="photo" accept="image/*" required>
+                    </fieldset>
+                    
+                    <fieldset>
+                        <legend>{{ texts.professional_profile }}</legend>
+                        <textarea id="profile" name="profile" rows="4" required></textarea>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>{{ texts.work_experience }}</legend>
+                        <textarea id="work_experience" name="work_experience" rows="4" required></textarea>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>{{ texts.education }}</legend>
+                        <textarea id="education" name="education" rows="4" required></textarea>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>{{ texts.skills }}</legend>
+                        <textarea id="skills" name="skills" rows="4" required></textarea>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>{{ texts.certifications }}</legend>
+                        <textarea id="certifications" name="certifications" rows="4"></textarea>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>{{ texts.languages }}</legend>
+                        <textarea id="languages" name="languages" rows="4"></textarea>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>{{ texts.references }}</legend>
+                        <textarea id="references" name="references" rows="4"></textarea>
+                    </fieldset>
+
+                    <button type="submit">{{ texts.submit }}</button>
+                </form>
+            {% else %}
+                <form method="POST" action="/">
+                    <label for="name">{{ texts.enter_name }}</label>
+                    <input type="text" id="name" name="name" required>
+                    <button type="submit">{{ texts.submit }}</button>
+                </form>
+            {% endif %}
+            
+            {% if full_name %}
+            <section class="curriculum-display slideIn">
+                <!-- Foto de perfil (en primer lugar) -->
+                <img src="/static/photos/{{ photo_filename }}" class="photo" alt="Foto de Perfil">
+                
+                <!-- Contenedor para el resto del currículum -->
+                <div class="details">
+                    <h2>{{ texts.curriculum_of }} {{ name }}</h2>
+                    <p><strong>{{ texts.full_name }}:</strong> {{ full_name }}</p>
+                    <p><strong>{{ texts.address }}:</strong> {{ address }}</p>
+                    <p><strong>{{ texts.phone }}:</strong> {{ phone }}</p>
+                    <p><strong>{{ texts.email }}:</strong> {{ email }}</p>
+                    <p><strong>{{ texts.dob }}:</strong> {{ dob }}</p>
+                    <p><strong>{{ texts.age }}:</strong> {{ age }}</p>
+                    <p><strong>{{ texts.professional_profile }}:</strong> {{ profile }}</p>
+                    <p><strong>{{ texts.work_experience }}:</strong> {{ work_experience }}</p>
+                    <p><strong>{{ texts.education }}:</strong> {{ education }}</p>
+                    <p><strong>{{ texts.skills }}:</strong> {{ skills }}</p>
+                    <p><strong>{{ texts.certifications }}:</strong> {{ certifications }}</p>
+                    <p><strong>{{ texts.languages }}:</strong> {{ languages }}</p>
+                    <p><strong>{{ texts.references }}:</strong> {{ references }}</p>
+                    <a href="/" class="back-link">{{ texts.back }}</a>
+                </div>
+            </section>
+            {% endif %}
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Formulario de Currículum. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
